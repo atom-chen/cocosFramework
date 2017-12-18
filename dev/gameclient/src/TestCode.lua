@@ -64,8 +64,8 @@ TEST_ALGO = false
 GAME_CFG = {}
 GAME_CFG.login_sdk = true -- 使用SDK登陆|||||||
 GAME_CFG.area = "youda" 
-GAME_CFG.game_logo_bg = "bg/login_bg_01.jpg"
-GAME_CFG.game_logo = "lang/logo.png"
+-- GAME_CFG.game_logo_bg = "bg/login_bg_01.jpg"
+-- GAME_CFG.game_logo = "lang/logo.png"
 -- 新手动画是否播放
 -- TEST_SKIP_ANIMATION = 0
 

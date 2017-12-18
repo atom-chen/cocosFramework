@@ -201,7 +201,7 @@ function cls:button(v, func, label, labelSize, color3b)
 			func(target)
 		end
 
-		TaskTutorial:checkGuide(guideName)
+		-- TaskTutorial:checkGuide(guideName)
 		--  TODO : play button click sound
 		Sound:play("sound/other/"..52)
 	end)

@@ -117,6 +117,7 @@ function cls.createSearchUserMsg(title, tips, rhand)
 end
 
 function cls:ctor(msg, yesFunc, noFunc, yeslabel, nolabel, title, costItem, endTime, extraInfo, noRemind, endTimeRhand, isSysMsg)
+	if true then return end
 	self.data = self.data or {}
 	self.data.msg = msg
 	self.data.noFunc = noFunc

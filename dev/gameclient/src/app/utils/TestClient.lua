@@ -5,7 +5,7 @@
 local cls = class("TestClient")
 
 cls.TIME_OUT = 3 -- 超时时间(秒)
-
+-- 192.168.1.72:10002
 function cls:ctor(ip, port, rhand)
 	self.ip    = ip
 	self.port  = port
@@ -31,9 +31,17 @@ function cls:tickHandler()
 	if s and #s >= 1 and s[1] == self.tcp then   -- 连接成功
 		print(string.format("*** 连接%s:%s成功, 耗时%s秒", self.ip, self.port, now))
 
-		-- 发送数据测试
+		-- -- 发送数据测试
+		local tbl = {
+			i = 1,
+			b = "player",
+			m = "register",
+			p = {"123", "123"},
+	}
+	local msg = json.encode(tbl)
 		local recvData, recvError, recvParticialData = self.tcp:receive(99999999)
-		self.tcp:send("{}")
+		self.tcp:send(msg)
+
 
 	    if recvError == 'closed' or now > cls.TIME_OUT then
 	    	print("*** 等待数据超时",self.ip, self.port)
@@ -42,9 +50,10 @@ function cls:tickHandler()
 
 	    elseif recvData or recvParticialData then
 			print(string.format("*** 接收数据%s:%s成功, 耗时%s秒", self.ip, self.port, now))
+			dump(recvData)
 	    	self.time = now
 			self.isOk = true
-	    	self.tcp:close()
+	    	-- self.tcp:close()
 	    	self:callback()
 	    end
 
@@ -53,6 +62,19 @@ function cls:tickHandler()
     	self.tcp:close()
 		self:callback()
 	end
+end
+
+--{"i":id,"b":类名,"m":方法名,"p":参数}
+function cls:send(bean, method, params)
+	local tbl = {
+		i = 1,
+		b = bean,
+		m = method,
+		p = params,
+	}
+	local msg = json.encode(tbl)
+	dump(msg, "send msg")
+	self.tcp:send(msg)
 end
 
 function cls:callback()

@@ -38,7 +38,70 @@ function cls:ctor()
 						:addTo(self)
 						:anchor(1, 0.5)
 						:pos(display.width-20, display.height-20)
+
+	Util:button("a_btn_01", handler(self, self.testConnect), "连接")
+		:addTo(self)
+		:pos(300, 300)
+	Util:button("a_btn_01", handler(self, self.testSend), "发送")
+		:addTo(self)
+		:pos(300, 200)
+	Util:button("a_btn_01", handler(self, self.testClose), "断开")
+		:addTo(self)
+		:pos(300, 100)
+
 end
+
+function cls:testConnect()
+	-- local socket = SocketTCP.new()
+	-- socket:setReconnTime(6)
+	-- socket:setConnFailTime(4)
+	-- socket:addEventListener(SocketTCP.EVENT_DATA, handler(self, self.receive))
+	-- socket:addEventListener(SocketTCP.EVENT_CLOSE, handler(self, self.tcpClose))
+	-- socket:addEventListener(SocketTCP.EVENT_CLOSED, handler(self, self.tcpClosed))
+	-- socket:addEventListener(SocketTCP.EVENT_CONNECTED, handler(self, self.tcpConnected))
+	-- socket:addEventListener(SocketTCP.EVENT_CONNECT_FAILURE, handler(self, self.tcpError))
+
+
+	-- self.net = socket
+	-- self.net:connect("192.168.1.72", "10002")
+	-- TestClient.new("192.168.1.72", "10002")
+	Net:connect("192.168.1.72", "10002")
+end
+
+function cls:testSend()
+	Net:send("player", "register", "12223", "1234");
+end
+
+function cls:testClose()
+	self.net:close()
+end
+
+function cls:receive(data)
+	dump(data, "cls:receive")
+end
+
+function cls:tcpClose()
+		print("***tcpClose*****")
+
+end
+
+function cls:tcpClosed()
+		print("***tcpClosed*****")
+
+end
+
+function cls:tcpConnected()
+	print("***tcpConnected*****")
+end
+
+
+function cls:tcpError()
+		print("***tcpError*****")
+
+end
+
+
+
 
 function cls:onEnter()
 	self.serverListHandle = Util:addEvent(Event.loadServerFinish, handler(self, self.onLoadServerList))

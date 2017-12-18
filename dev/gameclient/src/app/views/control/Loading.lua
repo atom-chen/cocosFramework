@@ -20,7 +20,7 @@ function cls.show(time)
 	if loading then
 		loading:showView()
 	else
-		cls.new()
+		-- cls.new()
 	end
 end
 

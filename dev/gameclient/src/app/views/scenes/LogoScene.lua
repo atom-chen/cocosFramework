@@ -14,7 +14,7 @@ function cls:onCreate()
 	local logo = GAME_CFG.game_init_logo
 	if logo and logo ~= "" then
 	else
-		logo = "login_start.png"
+		-- logo = "login_start.png"
 	end
 	
 	if bgColor == nil then
@@ -39,9 +39,9 @@ function cls:onCreate()
 					:align(display.left_bottom, 0, 0)
 	print(">>>logo scene")
 	local size = self:getContentSize()
-	self.logo = display.newSprite(logo)
-						:addTo(self)
-						:setPosition(display.cx, display.cy)
+	-- self.logo = display.newSprite(logo)
+	-- 					:addTo(self)
+	-- 					:setPosition(display.cx, display.cy)
 
 	require("app.views.game.common.GuangDian").new():addTo(self)
 end
