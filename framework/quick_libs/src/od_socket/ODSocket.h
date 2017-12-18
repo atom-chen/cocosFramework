@@ -68,6 +68,7 @@ const char TYPE_CONVERT = 11;
 
 const int TYPE_DECODE_1_BYTE = 1;
 const int TYPE_DECODE_2_BYTE = 2;
+const int TYPE_DECODE_JSON = 3;
 
 class ODSocket : cocos2d::Object
 {
@@ -129,6 +130,7 @@ public:
     void update(float dt);
     void readObj(lua_State *l,char *buf,unsigned char type); // 1字节表示自定义类长度
     void readObj2(lua_State *l,char *buf,unsigned char type); // 2字节表示自定义类长度
+	void readJsonObj(lua_State *l, char *buf); // 使用json格式 
 	void push(char* buf,int len,int recvSize);
 	void checkPack();
 	void setNonblock(int socket);

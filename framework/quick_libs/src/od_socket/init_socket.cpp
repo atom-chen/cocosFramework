@@ -109,6 +109,8 @@ int send(lua_State *l)
 	int len = strlen(msg);
 	unsigned char* buf;
 	unsigned long bufLen = len;
+	buf = new unsigned char[bufLen + 4];
+/*	memcpy(&buf[4], msg, len);*/
 	while(true)
 	{
 		buf = new unsigned char[bufLen + 4];
@@ -131,6 +133,8 @@ int send(lua_State *l)
 
 	CCLOG("*** send(%d)", bufLen);
 	unsigned long tmpLen = ntohl(bufLen);
+	unsigned long tmpLen2 = ntohl(56);
+
 	memcpy(buf, &tmpLen, 4);
 	lua_pushnumber(l,bufLen + 4);
 

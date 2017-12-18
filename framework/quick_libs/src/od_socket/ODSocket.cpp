@@ -10,7 +10,7 @@ ODSocket::ODSocket(SOCKET sock)
 {
 	m_sock = sock;
     
-    decodeType = TYPE_DECODE_1_BYTE;
+    decodeType = TYPE_DECODE_JSON;
 }
 
 ODSocket::~ODSocket()
@@ -464,6 +464,16 @@ void ODSocket::readObj2(lua_State *l, char *buf, unsigned char type)
     }
 }
 
+void ODSocket::readJsonObj(lua_State *l, char *buf) {
+	int v_len = tableLen;
+	char* v = new char[v_len + 1];
+	memset(v, 0, v_len + 1);
+	memcpy(v, buf, v_len);
+	v[v_len] = 0;
+	lua_pushstring(l, v);
+	delete[]v;
+}
+
 void ODSocket::update(float dt)
 {
     //	Director::getInstance()->getScheduler()->pauseTarget(this);
@@ -503,10 +513,14 @@ void ODSocket::update(float dt)
         {
             readObj(L,buf,0);
         }
-        else
+        else if(decodeType == TYPE_DECODE_2_BYTE)
         {
             readObj2(L,buf,0);
-        }
+		}
+		else {
+			readJsonObj(L, buf);
+
+		}
 		lua_pushinteger(L,recvSize);
 		lua_pcall(L,2,0,0);
 		lua_settop(L,top);
@@ -554,7 +568,7 @@ void ODSocket::checkPack()
 	int result = 0;
 	while (true)
 	{
-        if(decodeType == TYPE_DECODE_1_BYTE)
+        if(decodeType == TYPE_DECODE_1_BYTE || decodeType == TYPE_DECODE_JSON)
         {
             tmp = new unsigned char[len];
             result = uncompress(tmp,&len,(unsigned char*)buf,bufLen);
