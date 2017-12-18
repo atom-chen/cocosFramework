@@ -7,7 +7,11 @@
 // self includes
 #include "init_socket.h"
 #include "ODSocket.h"
-
+#ifdef WIN32
+#include<Winsock2.h>
+#else
+#include <arpa/inet.h>
+#endif
 using namespace std;
 using namespace cocos2d;
 
@@ -107,8 +111,8 @@ int send(lua_State *l)
 	unsigned long bufLen = len;
 	while(true)
 	{
-		buf = new unsigned char[bufLen + 2];
-		int result = compress(&buf[2],&bufLen,(unsigned char *)msg,len);
+		buf = new unsigned char[bufLen + 4];
+		int result = compress(&buf[4],&bufLen,(unsigned char *)msg,len);
 		if (Z_BUF_ERROR == result)
 		{
 			delete[] buf;
@@ -126,11 +130,11 @@ int send(lua_State *l)
 	}
 
 	CCLOG("*** send(%d)", bufLen);
-	buf[0] = (bufLen >> 8) & 0xff;
-	buf[1] = bufLen & 0xff;
-	lua_pushnumber(l,bufLen + 2);
+	unsigned long tmpLen = ntohl(bufLen);
+	memcpy(buf, &tmpLen, 4);
+	lua_pushnumber(l,bufLen + 4);
 
-	mySockets.Send((char *)buf,bufLen + 2);
+	mySockets.Send((char *)buf,bufLen + 4);
 	delete []buf;
 	return 1;
 }
